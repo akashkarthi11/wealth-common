@@ -154,6 +154,7 @@ public final class EnumData {
     // ===================== TOKEN / CLAIM =====================
 
     public static final String TOKEN_TYPE = "type";
+	public static final String SESSION_VERSION_CLAIM = "sv";
     public static final String TOKEN_TYPE_LONG = "LONG";
     public static final String TOKEN_TYPE_SHORT = "SHORT";
 

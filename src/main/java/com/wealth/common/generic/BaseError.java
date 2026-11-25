@@ -1193,6 +1193,12 @@ public class BaseError {
 	public static final String SMS_PROVIDER_INTERNAL_ERROR = "2713";
 	public static final String SMS_PROVIDER_INVALID_PARAMETER = "2714";
 	public static final String SMS_PROVIDER_AUTH_FAILED = "2715";
+
+	// Wealth login (6000 block)
+	public static final String PASSWORD_TOO_SHORT = "6001";
+	public static final String PASSWORD_TOO_LONG = "6002";
+	public static final String TOO_MANY_LOGIN_ATTEMPTS = "6003";
+	public static final String ADMIN_ONLY_ACTION = "6004";
 	
 //		public static final String DIRECT_DEBITS_NOT_FOUND_FOR_STATUS = "2132";
 //		public static final String DATE_NOT_FOUND = "2133";
