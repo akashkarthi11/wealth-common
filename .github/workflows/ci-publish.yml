@@ -1,4 +1,4 @@
-name: wealth-common CI and Publish
+name: Build and publish wealth-common
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   packages: write
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,9 +25,9 @@ jobs:
           server-username: GITHUB_ACTOR
           server-password: GITHUB_TOKEN
           settings-path: ${{ runner.temp }}
-      - name: Build and test
+      - name: Verify
         run: mvn --batch-mode --no-transfer-progress clean verify
-      - name: Publish Maven package
+      - name: Publish snapshot
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/development'
         run: mvn --batch-mode --no-transfer-progress deploy -DskipTests
         env:
