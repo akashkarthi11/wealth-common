@@ -46,4 +46,11 @@
       <groupId>org.apache.maven.plugins</groupId><artifactId>maven-jar-plugin</artifactId>
     </plugin>
   </plugins></build>
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages - wealth-common</name>
+      <url>https://maven.pkg.github.com/akashkarthi11/wealth-common</url>
+    </repository>
+  </distributionManagement>
 </project>
