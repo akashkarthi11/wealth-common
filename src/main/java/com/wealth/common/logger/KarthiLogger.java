@@ -3,10 +3,10 @@ package com.wealth.common.logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GrowxLogger {
+public class KarthiLogger {
 	private final Logger logger;
 
-    public GrowxLogger(Class<?> logClass) {
+    public KarthiLogger(Class<?> logClass) {
         this.logger = LoggerFactory.getLogger(logClass);
     }
 

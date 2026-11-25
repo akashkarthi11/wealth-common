@@ -28,6 +28,14 @@ For package access, Maven uses a GitHub token with `read:packages`. Do not commi
 
 ## Scope
 
-This repository currently contains shared legacy Wealth/GrowX components, including generic DAO/repository, assemblers, DTOs/entities, constants, client configuration, Redis/DataSource/Web configuration, job infrastructure, security utilities and interceptors.
+Only the pieces genuinely shared by both `wealth-bff` and `wealth-bss` live here: CORS/REST-template
+config, security headers + OpenAPI setup (`WebConfig`), Spring Batch job infrastructure (`job/*`), generic
+exception/response types, loggers, and JWT verification (`JwtTokenUtil`).
+
+The database connection, the generic repository, the Nexus/Customers-service Feign clients, and the
+request-context interceptor that used them are **not** here - each service (`wealth-bff-dev`,
+`wealth-bss-dev`) carries its own local copy of those under `com.wealth.<service>.common.*`, since they
+turned out to need per-service configuration (its own `DataSource`, its own feign targets) rather than one
+shared instance. See each service's own `pom.xml` for what it adds on top of this library.
 
 Review component compatibility before importing a shared configuration into BFF/BSS. Avoid enabling duplicate Spring beans or auto-configurations blindly.

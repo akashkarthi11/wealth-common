@@ -1108,7 +1108,7 @@ public class BaseError {
 	public static final String DATABASE_CONNECTION_FAILED = null;
 	
 	public static final String DATABASE_EXCEPTION = "5001";
-	public static final String GROWX_EXCEPTION = "5002";
+	public static final String KARTHI_EXCEPTION = "5002";
 	public static final String GENERIC_EXCEPTION = "5003";
 	public static final String SQL_EXCEPTION = "5004";
 	

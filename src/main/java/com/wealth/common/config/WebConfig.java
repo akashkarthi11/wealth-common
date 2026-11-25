@@ -10,11 +10,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.web.util.matcher.AnyRequestMatcher;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.wealth.common.interceptor.Interceptor;
-import com.wealth.common.logger.DoczLogger;
+import java.util.List;
+
+import com.wealth.common.logger.KarthiLogger;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -29,14 +31,15 @@ import io.swagger.v3.oas.models.media.StringSchema;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    private static final DoczLogger LOGGER = new DoczLogger(WebConfig.class);
+    private static final KarthiLogger LOGGER = new KarthiLogger(WebConfig.class);
 
-    private final Interceptor interceptor;
+    // Each service (wealth-bff, wealth-bss) supplies its own HandlerInterceptor bean(s) in its own
+    // package - wealth-common only wires whatever the consuming service's context happens to provide.
+    private final List<HandlerInterceptor> interceptors;
 
-    
-    public WebConfig(Interceptor interceptor) {
-        this.interceptor = interceptor;
-        LOGGER.info("WebConfig initialized with interceptor");
+    public WebConfig(List<HandlerInterceptor> interceptors) {
+        this.interceptors = interceptors;
+        LOGGER.info("WebConfig initialized with " + interceptors.size() + " interceptor(s)");
     }
 
     @Override
@@ -44,7 +47,9 @@ public class WebConfig implements WebMvcConfigurer {
         try {
         	LOGGER.info("addInterceptors");
             LOGGER.info("Adding interceptors to registry");
-            registry.addInterceptor(interceptor);
+            for (HandlerInterceptor interceptor : interceptors) {
+                registry.addInterceptor(interceptor);
+            }
             LOGGER.info("Interceptors added successfully");
         } catch (Exception e) {
             LOGGER.error("Failed to add interceptors: " + e.getMessage());
@@ -55,11 +60,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Configuration
     @EnableWebSecurity
     public class SecurityConfig {
-        private final DoczLogger SECURITY_LOGGER = new DoczLogger(SecurityConfig.class);
+        private final KarthiLogger SECURITY_LOGGER = new KarthiLogger(SecurityConfig.class);
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                @Value("${growx.security-headers.content-security-policy}") String contentSecurityPolicy) throws Exception {
+                @Value("${karthi.security-headers.content-security-policy}") String contentSecurityPolicy) throws Exception {
             try {
                 SECURITY_LOGGER.info("Configuring security filter chain");
                 http

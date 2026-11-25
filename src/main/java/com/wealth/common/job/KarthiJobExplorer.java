@@ -12,7 +12,7 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.lang.Nullable;
 
-public class GrowXJobExplorer implements JobExplorer {
+public class KarthiJobExplorer implements JobExplorer {
 
 	@Override
 	public List<JobInstance> getJobInstances(String jobName, int start, int count) {

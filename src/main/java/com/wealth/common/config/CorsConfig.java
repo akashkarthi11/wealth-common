@@ -11,13 +11,13 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.wealth.common.logger.DoczLogger;
+import com.wealth.common.logger.KarthiLogger;
 import com.wealth.common.properties.CorsProperties;
 
 @Configuration
 @EnableConfigurationProperties(CorsProperties.class)
 public class CorsConfig {
-    private static final DoczLogger LOGGER = new DoczLogger(CorsConfig.class);
+    private static final KarthiLogger LOGGER = new KarthiLogger(CorsConfig.class);
 
     private final CorsProperties corsProperties;
 

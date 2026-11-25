@@ -1,0 +1,8 @@
+target/
+# superseded by public-key.txt (same content) - the relay blocks any *.pem path on principle
+src/main/resources/public.pem
+.classpath
+.project
+.settings/
+.factorypath
+*.log

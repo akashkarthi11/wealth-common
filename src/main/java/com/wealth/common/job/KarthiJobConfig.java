@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan({"com.wealth.common.job"})
 @EnableBatchProcessing
 @EnableTransactionManagement
-public class GrowXJobConfig {
+public class KarthiJobConfig {
 
 	  @Bean
 	  @Primary
@@ -52,7 +52,7 @@ public class GrowXJobConfig {
 		    threadPoolTaskExecutor.setCorePoolSize(150);
 		    threadPoolTaskExecutor.setMaxPoolSize(300);
 		    threadPoolTaskExecutor.setQueueCapacity(300);
-		    threadPoolTaskExecutor.setThreadNamePrefix("growx-job-");
+		    threadPoolTaskExecutor.setThreadNamePrefix("karthi-job-");
 		    threadPoolTaskExecutor.setWaitForTasksToCompleteOnShutdown(true);
 		    threadPoolTaskExecutor.setAwaitTerminationSeconds(30);
 		    threadPoolTaskExecutor.initialize();
@@ -75,11 +75,11 @@ public class GrowXJobConfig {
 	  
 	  @Bean
 	  public JobExplorer jobExplorer() {
-	    return new GrowXJobExplorer();
+	    return new KarthiJobExplorer();
 	  }
 	  
 	  @Bean
-	  public JobRepository jobRepository(@Value("${growx.time-zone:Asia/Kolkata}") String timeZone) {
-	    return new GrowXJobRepository(ZoneId.of(timeZone));
+	  public JobRepository jobRepository(@Value("${karthi.time-zone:Asia/Kolkata}") String timeZone) {
+	    return new KarthiJobRepository(ZoneId.of(timeZone));
 	  }
 }

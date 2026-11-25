@@ -14,11 +14,11 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.lang.Nullable;
 
-import com.wealth.common.logger.GrowxLogger;
+import com.wealth.common.logger.KarthiLogger;
 
-public class GrowXJobRepository implements JobRepository {
+public class KarthiJobRepository implements JobRepository {
 	
-	private static final GrowxLogger logger = new GrowxLogger(GrowXJobRepository.class);
+	private static final KarthiLogger logger = new KarthiLogger(KarthiJobRepository.class);
 	
 	private static final AtomicLong JOB_INSTANCE_ID = new AtomicLong();
 
@@ -28,7 +28,7 @@ public class GrowXJobRepository implements JobRepository {
 
 	private final ZoneId defaultZone;
 
-	public GrowXJobRepository(ZoneId defaultZone) {
+	public KarthiJobRepository(ZoneId defaultZone) {
 		this.defaultZone = Objects.requireNonNull(defaultZone, "defaultZone");
 	}
 
