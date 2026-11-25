@@ -22,6 +22,8 @@ jobs:
           java-version: '21'
           cache: maven
           server-id: github
+          server-username: GITHUB_ACTOR
+          server-password: GITHUB_TOKEN
           settings-path: ${{ runner.temp }}
       - name: Build and test
         run: mvn --batch-mode --no-transfer-progress clean verify
