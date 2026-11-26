@@ -1199,6 +1199,12 @@ public class BaseError {
 	public static final String PASSWORD_TOO_LONG = "6002";
 	public static final String TOO_MANY_LOGIN_ATTEMPTS = "6003";
 	public static final String ADMIN_ONLY_ACTION = "6004";
+
+	// Wealth admin: roles and menus
+	public static final String ROLE_LOCKED = "6005";
+	public static final String UNKNOWN_ROLE = "6006";
+	public static final String UNKNOWN_MENU = "6007";
+	public static final String CHOOSE_A_MENU = "6008";
 	
 //		public static final String DIRECT_DEBITS_NOT_FOUND_FOR_STATUS = "2132";
 //		public static final String DATE_NOT_FOUND = "2133";

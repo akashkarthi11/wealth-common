@@ -57,6 +57,7 @@ a database change, a dependency change, and removing anything. A deploy approved
 ### 8. Data safety
 - No test touches the production database or Redis. Use a Neon branch or a test container.
 - Schema changes go only through the existing migrations in `wealth/scripts/migrations` until the plan says otherwise. The BSS never runs DDL.
+- Every table has the GrowX audit columns (`crtd_dt`, `crtd_by`, `updt_dt`, `updt_by`; migration 0054). A new table's migration ends with `SELECT wealth_add_audit('table');`, and `scripts/db/check-audit-columns.sql` must return 0 rows. System and cron writes are user 1.
 
 ### 9. Build and run (this laptop)
 - Java: `JAVA_HOME` is Zulu 21. There is no `mvn` on PATH. Use the cached Maven under `~/.m2/wrapper/dists/apache-maven-3.9.11/*/bin/mvn`, offline (`-o`).
