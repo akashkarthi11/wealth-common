@@ -148,7 +148,8 @@ public class Interceptor implements HandlerInterceptor {
 		}
 		String path = uri.substring(matcher.end());
 		return path.equals("/customers/users/login") || path.equals("/customers/users/register") || isUnder(path, "/health")
-				|| isUnder(path, "/lend-view");
+				|| isUnder(path, "/lend-view")
+				|| isUnder(path, "/internal/settings");
 	}
 
 	private static boolean isUnder(String path, String prefix) {

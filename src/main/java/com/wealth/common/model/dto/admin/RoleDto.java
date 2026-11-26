@@ -1,25 +1,13 @@
 package com.wealth.common.model.dto.admin;
 
-import java.io.Serializable;
-import java.util.List;
-
-public class RoleDto implements Serializable {
+// A role with the menus it can open (inherited); a locked role sends no menus because it always sees every one.
+public class RoleDto extends RoleMenusDto {
 
 	private static final long serialVersionUID = 1L;
 
-	private String role;
 	private String label;
 	private int users;
 	private boolean locked;
-	private List<String> menus;
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
 
 	public String getLabel() {
 		return label;
@@ -43,13 +31,5 @@ public class RoleDto implements Serializable {
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
-	}
-
-	public List<String> getMenus() {
-		return menus;
-	}
-
-	public void setMenus(List<String> menus) {
-		this.menus = menus;
 	}
 }

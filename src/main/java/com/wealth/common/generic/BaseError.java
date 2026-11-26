@@ -1205,6 +1205,28 @@ public class BaseError {
 	public static final String UNKNOWN_ROLE = "6006";
 	public static final String UNKNOWN_MENU = "6007";
 	public static final String CHOOSE_A_MENU = "6008";
+
+	// Wealth accounts
+	public static final String WEALTH_ACCOUNT_NOT_FOUND = "6009";
+
+	// Wealth admin: service addresses
+	public static final String CONNECTION_ADDRESS_INVALID = "6010";
+	public static final String CONNECTION_NOT_UP = "6011";
+
+	// Wealth admin: environment config (host:port settings)
+	public static final String ENVIRONMENT_ADDRESS_INVALID = "6012";
+	public static final String ENVIRONMENT_CREDENTIALS_INVALID = "6013";
+	public static final String SETTINGS_KEY_MISSING = "6014";
+	public static final String SERVICE_KEY_REJECTED = "6015";
+	public static final String MENU_NEEDS_PARENT = "6016";
+	public static final String ROLE_EXISTS = "6017";
+	public static final String LAST_ADMIN = "6018";
+	public static final String OWN_ROLE = "6019";
+	public static final String ROLE_NAME_INVALID = "6020";
+	public static final String PROVIDER_INVALID = "6021";
+	public static final String PROVIDER_NOT_FOUND = "6022";
+	public static final String CREDENTIALS_INCOMPLETE = "6023";
+	public static final String BROKER_FETCH_FAILED = "6024";
 	
 //		public static final String DIRECT_DEBITS_NOT_FOUND_FOR_STATUS = "2132";
 //		public static final String DATE_NOT_FOUND = "2133";

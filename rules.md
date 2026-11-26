@@ -64,6 +64,7 @@ a database change, a dependency change, and removing anything. A deploy approved
 - Node is not installed. Run Node tools through Docker (`node:20-alpine`). With Git Bash set `MSYS_NO_PATHCONV=1`.
 - Vercel deploy: `docker run ... node:20-alpine npx vercel@latest deploy --prod --yes`, with auth mounted from `C:/Users/THINKPAD/vercel-auth`.
 - `curl` to some HTTPS hosts needs `--ssl-no-revoke` on this laptop.
+- When `wealth-common` changes: build and install it first (`mvn -o -f wealth-common/pom.xml clean install`, tests green), then build `wealth-bss` and `wealth-bff` against it. Push `wealth-common` before them, because their CI builds it from GitHub `development`. A common change reaches the servers only when `wealth-bff` and `wealth-bss` are redeployed (ask first).
 
 ## wealth-common rules
 - Shared library used by both the BFF and the BSS: config, errors, logger, interceptor, DTOs. A change here affects both services.
