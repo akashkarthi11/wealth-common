@@ -11,6 +11,8 @@ public class GmailStatusDto implements Serializable {
 	// The Google client id and secret are saved and the service is on, so a user can connect.
 	private boolean appConfigured;
 	// How far back (days) and how many mails a read looks at, set in Connections > Common; null until the Google client is set up.
+	// The start of the saved Google client id followed by dots, for an admin only; never the whole id or the secret.
+	private String clientIdMasked;
 	private Integer statementDays;
 	private Integer statementMax;
 	private Integer alertDays;
@@ -112,6 +114,14 @@ public class GmailStatusDto implements Serializable {
 
 	public void setStatementPasswordsSet(boolean statementPasswordsSet) {
 		this.statementPasswordsSet = statementPasswordsSet;
+	}
+
+	public String getClientIdMasked() {
+		return clientIdMasked;
+	}
+
+	public void setClientIdMasked(String clientIdMasked) {
+		this.clientIdMasked = clientIdMasked;
 	}
 
 	public Integer getStatementDays() {
