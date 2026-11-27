@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
@@ -20,6 +22,7 @@ import org.mockito.MockedStatic;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.wealth.common.client.NexusServiceClient;
 import com.wealth.common.model.dto.ThreadLocalDto;
@@ -77,6 +80,8 @@ class InterceptorTest {
 		assertTrue(Interceptor.isPublicEndpoint("/wealth-service/api/v1/customers/users/register"));
 		assertTrue(Interceptor.isPublicEndpoint("/wealth-service/api/v1/health"));
 		assertTrue(Interceptor.isPublicEndpoint("/wealth-service/api/v1/lend-view"));
+		assertTrue(Interceptor.isPublicEndpoint("/wealth-service/api/v1/internal/usage/record"), "service to service, proved by the service key");
+		assertFalse(Interceptor.isPublicEndpoint("/wealth-service/api/v1/internal/usagex/record"));
 	}
 
 	@Test
@@ -249,5 +254,83 @@ class InterceptorTest {
 	@Test
 	void tokenWithTheCurrentSessionVersionPasses() throws Exception {
 		assertTrue(preHandleWithSv(4, 4));
+	}
+
+	// ---- API usage: every finished request is reported once to the optional recorder ----
+
+	@SuppressWarnings("unchecked")
+	private ApiUsageRecorder recorderOn() {
+		ApiUsageRecorder recorder = mock(ApiUsageRecorder.class);
+		ObjectProvider<ApiUsageRecorder> usage = mock(ObjectProvider.class);
+		when(usage.getIfAvailable()).thenReturn(recorder);
+		interceptor = new Interceptor(jwt, provider, usage);
+		return recorder;
+	}
+
+	@Test
+	void aFinishedRequestIsReportedOnceWithTheRouteTemplateStatusAndTime() throws Exception {
+		ApiUsageRecorder recorder = recorderOn();
+		MockHttpServletRequest req = request("GET", "/actuator/health");
+		req.setAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE, "/wealth-service/api/v1/accounts/detail");
+		interceptor.preHandle(req, response, null);
+		response.setStatus(200);
+
+		interceptor.afterCompletion(req, response, null, null);
+
+		verify(recorder, times(1)).record(eq("GET"), eq("/wealth-service/api/v1/accounts/detail"), eq(200), anyLong());
+	}
+
+	@Test
+	void aRequestTheInterceptorRejectsIsCountedToo() throws Exception {
+		ApiUsageRecorder recorder = recorderOn();
+		MockHttpServletRequest req = request("POST", "/wealth/api/v1/ledger");
+		req.setAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE, "/wealth/api/v1/ledger");
+
+		assertFalse(interceptor.preHandle(req, response, null));
+
+		verify(recorder, times(1)).record(eq("POST"), eq("/wealth/api/v1/ledger"), eq(401), anyLong());
+	}
+
+	@Test
+	void aRequestWithNoMatchedRouteIsReportedWithANullRoute() throws Exception {
+		ApiUsageRecorder recorder = recorderOn();
+		MockHttpServletRequest req = request("GET", "/actuator/health");
+		interceptor.preHandle(req, response, null);
+		response.setStatus(404);
+
+		interceptor.afterCompletion(req, response, null, null);
+
+		verify(recorder).record(eq("GET"), org.mockito.ArgumentMatchers.isNull(), eq(404), anyLong());
+	}
+
+	@Test
+	void anErrorForwardIsNotCountedAsASecondRequest() throws Exception {
+		ApiUsageRecorder recorder = recorderOn();
+		MockHttpServletRequest req = request("POST", "/error");
+		req.setDispatcherType(jakarta.servlet.DispatcherType.ERROR);
+		interceptor.preHandle(req, response, null);
+
+		interceptor.afterCompletion(req, response, null, null);
+
+		verify(recorder, never()).record(anyString(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.anyInt(), anyLong());
+	}
+
+	@Test
+	void aFailureInTheRecorderNeverReachesTheRequest() throws Exception {
+		ApiUsageRecorder recorder = recorderOn();
+		org.mockito.Mockito.doThrow(new IllegalStateException("redis down")).when(recorder).record(anyString(), org.mockito.ArgumentMatchers.any(),
+				org.mockito.ArgumentMatchers.anyInt(), anyLong());
+		MockHttpServletRequest req = request("GET", "/actuator/health");
+		interceptor.preHandle(req, response, null);
+
+		interceptor.afterCompletion(req, response, null, null);
+	}
+
+	@Test
+	void withoutARecorderNothingIsCountedAndNothingFails() throws Exception {
+		MockHttpServletRequest req = request("GET", "/actuator/health");
+		interceptor.preHandle(req, response, null);
+
+		interceptor.afterCompletion(req, response, null, null);
 	}
 }

@@ -1227,6 +1227,7 @@ public class BaseError {
 	public static final String PROVIDER_NOT_FOUND = "6022";
 	public static final String CREDENTIALS_INCOMPLETE = "6023";
 	public static final String BROKER_FETCH_FAILED = "6024";
+	public static final String REFRESH_TIME_INVALID = "6025";
 	
 //		public static final String DIRECT_DEBITS_NOT_FOUND_FOR_STATUS = "2132";
 //		public static final String DATE_NOT_FOUND = "2133";

@@ -7,6 +7,9 @@ public class ConnectionDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// Kafka only: after this many seconds a cached read counts as stale and is refreshed (5 to 60).
+	private int refreshSeconds;
+
 	private String url;
 	private String defaultUrl;
 	private boolean customised;
@@ -14,6 +17,16 @@ public class ConnectionDto implements Serializable {
 	// The user the service signs in as (empty when none), and whether a password is set. The password itself is never returned.
 	private String username;
 	private boolean passwordSet;
+	// The Active / Inactive switch (Redis and Kafka). Inactive means the BSS does not use the service; status is then OFF.
+	private boolean enabled = true;
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	public String getUrl() {
 		return url;
@@ -61,5 +74,13 @@ public class ConnectionDto implements Serializable {
 
 	public void setPasswordSet(boolean passwordSet) {
 		this.passwordSet = passwordSet;
+	}
+
+	public int getRefreshSeconds() {
+		return refreshSeconds;
+	}
+
+	public void setRefreshSeconds(int refreshSeconds) {
+		this.refreshSeconds = refreshSeconds;
 	}
 }

@@ -5,8 +5,10 @@ import java.util.regex.Pattern;
 
 import org.slf4j.MDC;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.wealth.common.client.NexusServiceClient;
 import com.wealth.common.generic.EnumData;
@@ -16,6 +18,7 @@ import com.wealth.common.utils.generic.RequestHeaderUtil;
 import com.wealth.common.utils.security.JwtTokenUtil;
 
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -29,10 +32,17 @@ public class Interceptor implements HandlerInterceptor {
 
 	private final JwtTokenUtil jwtUtils;
 	private final ObjectProvider<NexusServiceClient> nexusServiceClient;
+	private final ObjectProvider<ApiUsageRecorder> usage;
 
 	public Interceptor(JwtTokenUtil jwtUtils, ObjectProvider<NexusServiceClient> nexusServiceClient) {
+		this(jwtUtils, nexusServiceClient, null);
+	}
+
+	@Autowired
+	public Interceptor(JwtTokenUtil jwtUtils, ObjectProvider<NexusServiceClient> nexusServiceClient, ObjectProvider<ApiUsageRecorder> usage) {
 		this.jwtUtils = jwtUtils;
 		this.nexusServiceClient = nexusServiceClient;
+		this.usage = usage;
 	}
 
 	@Override
@@ -69,26 +79,26 @@ public class Interceptor implements HandlerInterceptor {
 		String authorization = request.getHeader(EnumData.AUTHORIZATION);
 		if (authorization == null || authorization.isBlank()) {
 			LOGGER.warn("Missing Authorization header. uri =" + uri);
-			return deny(response);
+			return deny(request, response);
 		}
 		if (!authorization.startsWith(EnumData.BEARER_PREFIX)) {
 			LOGGER.warn("Invalid Authorization format. uri =" + uri);
-			return deny(response);
+			return deny(request, response);
 		}
 		String token = authorization.substring(EnumData.BEARER_PREFIX.length());
 		if (!jwtUtils.validateJwtToken(token)) {
 			LOGGER.warn("JWT validation failed. uri =" + uri);
-			return deny(response);
+			return deny(request, response);
 		}
 		Claims claims = JwtTokenUtil.getClaimsFromToken(token);
 		if (claims == null) {
 			LOGGER.warn("JWT claims extraction failed. uri =" + uri);
-			return deny(response);
+			return deny(request, response);
 		}
 		String userId = claims.getSubject();
 		if (userId == null || userId.isBlank()) {
 			LOGGER.warn("JWT subject claim missing or empty. uri =" + uri);
-			return deny(response);
+			return deny(request, response);
 		}
 		RequestHeaderUtil.setUserId(userId);
 
@@ -98,13 +108,13 @@ public class Interceptor implements HandlerInterceptor {
 			ThreadLocalDto context = nexus.getRequestHeaderCache(userId);
 			if (context == null) {
 				LOGGER.warn("No cached request context for the user. uri =" + uri);
-				return deny(response);
+				return deny(request, response);
 			}
 			// A password reset or role change bumps session_version; tokens issued before it stop working.
 			Integer tokenVersion = claims.get(EnumData.SESSION_VERSION_CLAIM, Integer.class);
 			if (tokenVersion == null || !tokenVersion.equals(context.getSessionVersion())) {
 				LOGGER.warn("Token session version does not match. uri =" + uri);
-				return deny(response);
+				return deny(request, response);
 			}
 		}
 		return true;
@@ -121,15 +131,34 @@ public class Interceptor implements HandlerInterceptor {
 			LOGGER.info("[traceId=" + traceId + "] [spanId=" + spanId + "] API END -> " + request.getMethod() + " "
 					+ request.getRequestURI() + " | Status=" + response.getStatus() + " | Time="
 					+ String.format("%.3f", durationSec) + " sec");
+			count(request, response.getStatus());
 		}
 		MDC.remove("traceId");
 		MDC.remove("spanId");
 		RequestHeaderUtil.clear();
 	}
 
-	private boolean deny(HttpServletResponse response) {
+	// Spring does not call afterCompletion for an interceptor that stopped the request, so a rejected request is counted here.
+	private boolean deny(HttpServletRequest request, HttpServletResponse response) {
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		count(request, HttpServletResponse.SC_UNAUTHORIZED);
 		return false;
+	}
+
+	// Reports one finished request to the optional recorder: the matched route template, the result and the time. Once per request: an error forward
+	// (/error) is not a second request. Anything the recorder throws is ignored.
+	private void count(HttpServletRequest request, int status) {
+		Long startTime = (Long) request.getAttribute("START_TIME");
+		ApiUsageRecorder recorder = usage == null ? null : usage.getIfAvailable();
+		if (recorder == null || startTime == null || request.getDispatcherType() != DispatcherType.REQUEST) {
+			return;
+		}
+		try {
+			Object route = request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+			recorder.record(request.getMethod(), route == null ? null : route.toString(), status, (System.nanoTime() - startTime) / 1_000_000L);
+		} catch (RuntimeException e) {
+			LOGGER.warn("API usage not counted: " + e.getClass().getSimpleName());
+		}
 	}
 
 	// Paths are matched without the /wealth/api/v1 (BFF) or /wealth-service/api/v1 (BSS) prefix.
@@ -149,7 +178,7 @@ public class Interceptor implements HandlerInterceptor {
 		String path = uri.substring(matcher.end());
 		return path.equals("/customers/users/login") || path.equals("/customers/users/register") || isUnder(path, "/health")
 				|| isUnder(path, "/lend-view")
-				|| isUnder(path, "/internal/settings");
+				|| isUnder(path, "/internal/settings") || isUnder(path, "/internal/usage");
 	}
 
 	private static boolean isUnder(String path, String prefix) {

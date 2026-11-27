@@ -7,11 +7,24 @@ public class ConnectionRequestDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// For the Kafka refresh time only.
+	private Integer refreshSeconds;
+
 	// key: which service address (ui_to_bff or bff_to_bss) when saving one.
 	private String key;
 	private String url;
 	private String username;
 	private String password;
+	// For the Active / Inactive switch only: true turns the service on, false turns it off.
+	private Boolean enabled;
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	public String getKey() {
 		return key;
@@ -43,5 +56,13 @@ public class ConnectionRequestDto implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Integer getRefreshSeconds() {
+		return refreshSeconds;
+	}
+
+	public void setRefreshSeconds(Integer refreshSeconds) {
+		this.refreshSeconds = refreshSeconds;
 	}
 }

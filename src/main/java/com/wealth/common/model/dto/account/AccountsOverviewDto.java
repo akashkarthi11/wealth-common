@@ -7,6 +7,10 @@ public class AccountsOverviewDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// When these totals were read from the database (the nexus cache); stale = older than the refresh time.
+	private java.sql.Timestamp fetchedAt;
+	private boolean stale;
+
 	private AccountTotalsDto totals;
 	private List<BankDto> banks;
 
@@ -24,5 +28,21 @@ public class AccountsOverviewDto implements Serializable {
 
 	public void setBanks(List<BankDto> banks) {
 		this.banks = banks;
+	}
+
+	public java.sql.Timestamp getFetchedAt() {
+		return fetchedAt;
+	}
+
+	public void setFetchedAt(java.sql.Timestamp fetchedAt) {
+		this.fetchedAt = fetchedAt;
+	}
+
+	public boolean isStale() {
+		return stale;
+	}
+
+	public void setStale(boolean stale) {
+		this.stale = stale;
 	}
 }

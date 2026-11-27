@@ -8,6 +8,10 @@ public class InvestmentsDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// When this list was read from the database (the nexus cache); stale = older than the refresh time.
+	private java.sql.Timestamp fetchedAt;
+	private boolean stale;
+
 	private BigDecimal invested;
 	private BigDecimal currentValue;
 	private BigDecimal gain;
@@ -70,5 +74,21 @@ public class InvestmentsDto implements Serializable {
 
 	public void setHoldings(List<HoldingDto> holdings) {
 		this.holdings = holdings;
+	}
+
+	public java.sql.Timestamp getFetchedAt() {
+		return fetchedAt;
+	}
+
+	public void setFetchedAt(java.sql.Timestamp fetchedAt) {
+		this.fetchedAt = fetchedAt;
+	}
+
+	public boolean isStale() {
+		return stale;
+	}
+
+	public void setStale(boolean stale) {
+		this.stale = stale;
 	}
 }
