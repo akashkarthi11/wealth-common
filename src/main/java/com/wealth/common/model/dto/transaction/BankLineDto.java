@@ -19,6 +19,16 @@ public class BankLineDto implements Serializable {
 	private boolean debit;
 	private boolean sure;
 	private boolean suspicious;
+	// The account the user chose for the line; checked to be theirs. Without it the account is found from the bank and the last digits.
+	private String accountId;
+
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
 
 	public String getRef() {
 		return ref;

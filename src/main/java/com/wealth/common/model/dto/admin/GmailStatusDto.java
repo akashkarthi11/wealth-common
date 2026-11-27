@@ -10,6 +10,8 @@ public class GmailStatusDto implements Serializable {
 
 	// The Google client id and secret are saved and the service is on, so a user can connect.
 	private boolean appConfigured;
+	// The labels of the extra statement passwords the user added (never the passwords).
+	private java.util.List<String> extraLabels = new java.util.ArrayList<>();
 	// How far back (days) and how many mails a read looks at, set in Connections > Common; null until the Google client is set up.
 	// The start of the saved Google client id followed by dots, for an admin only; never the whole id or the secret.
 	private String clientIdMasked;
@@ -146,6 +148,14 @@ public class GmailStatusDto implements Serializable {
 
 	public void setAlertDays(Integer alertDays) {
 		this.alertDays = alertDays;
+	}
+
+	public java.util.List<String> getExtraLabels() {
+		return extraLabels;
+	}
+
+	public void setExtraLabels(java.util.List<String> extraLabels) {
+		this.extraLabels = extraLabels;
 	}
 
 	public boolean isAppConfigured() {

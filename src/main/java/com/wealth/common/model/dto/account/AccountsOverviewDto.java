@@ -16,6 +16,17 @@ public class AccountsOverviewDto implements Serializable {
 	// Accounts valued by their holdings (demat, funds, digital gold ...): not banks, listed here so a holding can be added to them.
 	private List<AccountDto> investmentAccounts = new java.util.ArrayList<>();
 
+	// Closed accounts: shown greyed on Banks, never added to any total.
+	private List<AccountDto> closedAccounts = new java.util.ArrayList<>();
+
+	public List<AccountDto> getClosedAccounts() {
+		return closedAccounts;
+	}
+
+	public void setClosedAccounts(List<AccountDto> closedAccounts) {
+		this.closedAccounts = closedAccounts;
+	}
+
 	public List<AccountDto> getInvestmentAccounts() {
 		return investmentAccounts;
 	}

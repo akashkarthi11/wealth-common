@@ -12,6 +12,8 @@ public class GmailFetchResultDto implements Serializable {
 	private int read;
 	private int added;
 	private int duplicates;
+	// Alerts saved earlier without an account that now got one.
+	private int mapped;
 	private int skipped;
 	// Alerts sent to the Data quality screen because they look like a duplicate or fake (not stored until the user decides).
 	private int review;
@@ -39,6 +41,14 @@ public class GmailFetchResultDto implements Serializable {
 
 	public void setAdded(int added) {
 		this.added = added;
+	}
+
+	public int getMapped() {
+		return mapped;
+	}
+
+	public void setMapped(int mapped) {
+		this.mapped = mapped;
 	}
 
 	public int getDuplicates() {

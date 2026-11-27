@@ -11,6 +11,8 @@ public class BankImportResultDto implements Serializable {
 	private int same;
 	private int review;
 	private int repeated;
+	// Lines already imported without an account that now got one (repeated lines are counted in repeated too).
+	private int mapped;
 
 	public int getStored() {
 		return stored;
@@ -34,6 +36,14 @@ public class BankImportResultDto implements Serializable {
 
 	public void setReview(int review) {
 		this.review = review;
+	}
+
+	public int getMapped() {
+		return mapped;
+	}
+
+	public void setMapped(int mapped) {
+		this.mapped = mapped;
 	}
 
 	public int getRepeated() {

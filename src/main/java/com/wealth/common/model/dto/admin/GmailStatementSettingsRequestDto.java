@@ -11,6 +11,43 @@ public class GmailStatementSettingsRequestDto implements Serializable {
 	private String dob;
 	// The first four letters of the name: HDFC card statements are locked with these (capitals) and the day and month of birth (DDMM).
 	private String name4;
+	// One more password to keep, under a label (for example the bank), and one label to remove. extras is only filled in the answer to reveal (label to password).
+	private String extraLabel;
+	private String extraValue;
+	private String removeExtra;
+	private java.util.Map<String, String> extras;
+
+	public String getExtraLabel() {
+		return extraLabel;
+	}
+
+	public void setExtraLabel(String extraLabel) {
+		this.extraLabel = extraLabel;
+	}
+
+	public String getExtraValue() {
+		return extraValue;
+	}
+
+	public void setExtraValue(String extraValue) {
+		this.extraValue = extraValue;
+	}
+
+	public String getRemoveExtra() {
+		return removeExtra;
+	}
+
+	public void setRemoveExtra(String removeExtra) {
+		this.removeExtra = removeExtra;
+	}
+
+	public java.util.Map<String, String> getExtras() {
+		return extras;
+	}
+
+	public void setExtras(java.util.Map<String, String> extras) {
+		this.extras = extras;
+	}
 
 	public String getName4() {
 		return name4;
