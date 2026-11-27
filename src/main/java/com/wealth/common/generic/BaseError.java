@@ -1228,6 +1228,25 @@ public class BaseError {
 	public static final String CREDENTIALS_INCOMPLETE = "6023";
 	public static final String BROKER_FETCH_FAILED = "6024";
 	public static final String REFRESH_TIME_INVALID = "6025";
+	public static final String ACCOUNT_TYPE_INVALID = "6026";
+	public static final String ACCOUNT_DETAILS_INVALID = "6027";
+	public static final String ACCOUNT_CURRENCY_INVALID = "6028";
+	public static final String FD_TERMS_INVALID = "6029";
+	public static final String ACCOUNT_EXISTS = "6030";
+	public static final String BALANCE_NOT_ALLOWED = "6031";
+	public static final String BALANCE_INVALID = "6032";
+	public static final String HOLDING_INVALID = "6033";
+	public static final String HOLDING_ACCOUNT_INVALID = "6034";
+	public static final String TRANSACTION_INVALID = "6040";
+	public static final String TRANSACTION_ACCOUNT_INVALID = "6041";
+	public static final String TRANSACTION_REFERENCE_EXISTS = "6042";
+	public static final String WORKFLOW_NOT_FOUND = "6043";
+	public static final String WORKFLOW_DECISION_INVALID = "6044";
+	public static final String GMAIL_NOT_CONFIGURED = "6035";
+	public static final String GMAIL_REQUEST_INVALID = "6036";
+	public static final String GMAIL_CONNECT_FAILED = "6037";
+	public static final String GMAIL_NOT_CONNECTED = "6038";
+	public static final String GMAIL_FETCH_FAILED = "6039";
 	
 //		public static final String DIRECT_DEBITS_NOT_FOUND_FOR_STATUS = "2132";
 //		public static final String DATE_NOT_FOUND = "2133";

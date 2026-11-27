@@ -18,6 +18,9 @@ public class InvestmentsDto implements Serializable {
 	private BigDecimal gainPercent;
 	private int holdingCount;
 	private int unpricedCount;
+	// The cash in the broker accounts as the broker last reported it (an estimate; it may include margin) and when. Not part of the holdings value or net worth. Null when none.
+	private BigDecimal cash;
+	private java.sql.Timestamp cashAsOf;
 	private List<HoldingDto> holdings;
 
 	public BigDecimal getInvested() {
@@ -66,6 +69,22 @@ public class InvestmentsDto implements Serializable {
 
 	public void setUnpricedCount(int unpricedCount) {
 		this.unpricedCount = unpricedCount;
+	}
+
+	public BigDecimal getCash() {
+		return cash;
+	}
+
+	public void setCash(BigDecimal cash) {
+		this.cash = cash;
+	}
+
+	public java.sql.Timestamp getCashAsOf() {
+		return cashAsOf;
+	}
+
+	public void setCashAsOf(java.sql.Timestamp cashAsOf) {
+		this.cashAsOf = cashAsOf;
 	}
 
 	public List<HoldingDto> getHoldings() {
