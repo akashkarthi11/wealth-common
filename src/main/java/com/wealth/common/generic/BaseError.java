@@ -1242,6 +1242,7 @@ public class BaseError {
 	public static final String TRANSACTION_REFERENCE_EXISTS = "6042";
 	public static final String WORKFLOW_NOT_FOUND = "6043";
 	public static final String WORKFLOW_DECISION_INVALID = "6044";
+	public static final String ACCESS_CODE_TOO_SHORT = "6046";
 	public static final String GMAIL_NOT_CONFIGURED = "6035";
 	public static final String GMAIL_REQUEST_INVALID = "6036";
 	public static final String GMAIL_CONNECT_FAILED = "6037";
