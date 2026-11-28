@@ -12,6 +12,7 @@ public class GmailStatementRowDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String source;
+	private Timestamp receivedAt;
 	private Timestamp readAt;
 	private Map<String, String> figures = new LinkedHashMap<>();
 	// So the table can offer Accept: the statement's id, how many transaction rows it kept, and when the user accepted them (null = not yet).
@@ -49,6 +50,14 @@ public class GmailStatementRowDto implements Serializable {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+
+	public Timestamp getReceivedAt() {
+		return receivedAt;
+	}
+
+	public void setReceivedAt(Timestamp receivedAt) {
+		this.receivedAt = receivedAt;
 	}
 
 	public Timestamp getReadAt() {
