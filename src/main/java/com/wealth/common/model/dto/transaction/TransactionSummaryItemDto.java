@@ -9,6 +9,8 @@ public class TransactionSummaryItemDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String label;
+	// The transaction kind of a category or kind row (expense, income, investment, liability); null in the account and month rows.
+	private String kind;
 	private BigDecimal incoming = BigDecimal.ZERO;
 	private BigDecimal outgoing = BigDecimal.ZERO;
 	private int count;
@@ -19,6 +21,14 @@ public class TransactionSummaryItemDto implements Serializable {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getKind() {
+		return kind;
+	}
+
+	public void setKind(String kind) {
+		this.kind = kind;
 	}
 
 	public BigDecimal getIncoming() {

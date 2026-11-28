@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // The dashboard for the transactions the filters select (all of them, not one page): what came in and went out, the net, the count, and the same split by category, by account
-// and by month (month is yyyy-MM, oldest first). Transfers, copies and dismissed entries are left out, as in the list. byCategory and byAccount are largest outgoing first, at most 8 each.
+// and by month (month is yyyy-MM, oldest first). Transfers, copies and dismissed entries are left out, as in the list. byAccount is largest outgoing first, at most 8.
+// byCategory holds the biggest 12 categories of each kind (kind on every row); byKind has one row per kind with its totals.
 public class TransactionSummaryDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -17,6 +18,7 @@ public class TransactionSummaryDto implements Serializable {
 	private int count;
 	private List<TransactionSummaryItemDto> byCategory = new ArrayList<>();
 	private List<TransactionSummaryItemDto> byAccount = new ArrayList<>();
+	private List<TransactionSummaryItemDto> byKind = new ArrayList<>();
 	private List<TransactionSummaryItemDto> byMonth = new ArrayList<>();
 
 	public BigDecimal getIncoming() {
@@ -65,6 +67,14 @@ public class TransactionSummaryDto implements Serializable {
 
 	public void setByAccount(List<TransactionSummaryItemDto> byAccount) {
 		this.byAccount = byAccount;
+	}
+
+	public List<TransactionSummaryItemDto> getByKind() {
+		return byKind;
+	}
+
+	public void setByKind(List<TransactionSummaryItemDto> byKind) {
+		this.byKind = byKind;
 	}
 
 	public List<TransactionSummaryItemDto> getByMonth() {
