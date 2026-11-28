@@ -20,6 +20,10 @@ public class TransactionDto implements Serializable {
 	private String reviewStatus;
 	private String duplicateOf;
 	private boolean inactive;
+	// A bill split made from this transaction: how many people share it, its state and its mode (equal or amounts); null when it has none.
+	private int splitPeople;
+	private String splitStatus;
+	private String splitMode;
 
 	public String getId() {
 		return id;
@@ -107,6 +111,30 @@ public class TransactionDto implements Serializable {
 
 	public void setDuplicateOf(String duplicateOf) {
 		this.duplicateOf = duplicateOf;
+	}
+
+	public int getSplitPeople() {
+		return splitPeople;
+	}
+
+	public void setSplitPeople(int splitPeople) {
+		this.splitPeople = splitPeople;
+	}
+
+	public String getSplitStatus() {
+		return splitStatus;
+	}
+
+	public void setSplitStatus(String splitStatus) {
+		this.splitStatus = splitStatus;
+	}
+
+	public String getSplitMode() {
+		return splitMode;
+	}
+
+	public void setSplitMode(String splitMode) {
+		this.splitMode = splitMode;
 	}
 
 	public boolean isInactive() {

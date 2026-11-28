@@ -11,6 +11,8 @@ public class TransactionPageRequestDto implements Serializable {
 	private Integer size;
 	private String q;
 	private String kind;
+	// Only this category (exactly as the dashboard names it); empty = every category.
+	private String category;
 	private String accountId;
 	private String from;
 	private String to;
@@ -37,6 +39,14 @@ public class TransactionPageRequestDto implements Serializable {
 
 	public void setQ(String q) {
 		this.q = q;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public String getKind() {

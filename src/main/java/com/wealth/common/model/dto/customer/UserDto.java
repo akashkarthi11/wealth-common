@@ -11,6 +11,11 @@ public class UserDto implements Serializable {
 	private String email;
 	private String role;
 	private List<String> menus;
+	// Profile details (My profile): null when not set.
+	private String displayName;
+	private String mobile;
+	private String dateFormat;
+	private String homeScreen;
 
 	public String getId() {
 		return id;
@@ -42,5 +47,37 @@ public class UserDto implements Serializable {
 
 	public void setMenus(List<String> menus) {
 		this.menus = menus;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	public String getHomeScreen() {
+		return homeScreen;
+	}
+
+	public void setHomeScreen(String homeScreen) {
+		this.homeScreen = homeScreen;
 	}
 }
