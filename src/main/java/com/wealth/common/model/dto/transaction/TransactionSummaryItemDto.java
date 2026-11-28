@@ -14,6 +14,26 @@ public class TransactionSummaryItemDto implements Serializable {
 	private BigDecimal incoming = BigDecimal.ZERO;
 	private BigDecimal outgoing = BigDecimal.ZERO;
 	private int count;
+	// yyyy-MM on the rows the server reads per category and month; used to build the trend and not sent on.
+	private String period;
+	// A category's amount in each of the months of byMonth (oldest first; income for an income category, money out otherwise); empty in other rows.
+	private java.util.List<BigDecimal> trend = new java.util.ArrayList<>();
+
+	public String getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+
+	public java.util.List<BigDecimal> getTrend() {
+		return trend;
+	}
+
+	public void setTrend(java.util.List<BigDecimal> trend) {
+		this.trend = trend;
+	}
 
 	public String getLabel() {
 		return label;

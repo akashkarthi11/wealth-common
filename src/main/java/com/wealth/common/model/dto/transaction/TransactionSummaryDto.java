@@ -19,6 +19,8 @@ public class TransactionSummaryDto implements Serializable {
 	private List<TransactionSummaryItemDto> byCategory = new ArrayList<>();
 	private List<TransactionSummaryItemDto> byAccount = new ArrayList<>();
 	private List<TransactionSummaryItemDto> byKind = new ArrayList<>();
+	// One row per day (label yyyy-MM-dd), newest first, at most the latest 371 days that have transactions.
+	private List<TransactionSummaryItemDto> byDay = new ArrayList<>();
 	private List<TransactionSummaryItemDto> byMonth = new ArrayList<>();
 
 	public BigDecimal getIncoming() {
@@ -67,6 +69,14 @@ public class TransactionSummaryDto implements Serializable {
 
 	public void setByAccount(List<TransactionSummaryItemDto> byAccount) {
 		this.byAccount = byAccount;
+	}
+
+	public List<TransactionSummaryItemDto> getByDay() {
+		return byDay;
+	}
+
+	public void setByDay(List<TransactionSummaryItemDto> byDay) {
+		this.byDay = byDay;
 	}
 
 	public List<TransactionSummaryItemDto> getByKind() {
