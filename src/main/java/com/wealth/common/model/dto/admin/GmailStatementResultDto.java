@@ -25,6 +25,17 @@ public class GmailStatementResultDto implements Serializable {
 	// How many of the statements with no known row layout were read by the AI provider (their personal details were hidden before sending).
 	private int aiStatements;
 
+	// How many statement mails Gmail would not give this time (a dropped connection, Google busy). The rest were read; reading again picks these up.
+	private int failed;
+
+	public int getFailed() {
+		return failed;
+	}
+
+	public void setFailed(int failed) {
+		this.failed = failed;
+	}
+
 	public int getAiStatements() {
 		return aiStatements;
 	}

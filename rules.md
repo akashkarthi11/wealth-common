@@ -89,6 +89,26 @@ Owner rule, 2026-11-27. Plan: `wealth/docs/plans/2026-11-27-api-usage-counting-p
 - Redis Inactive or down: the counts stay in memory and are saved to the database directly (rules 10a). Counting never fails or slows a call, and a failure in it is swallowed.
 - Only names, counts and milliseconds are stored: no user id, email, token or body.
 - Any new outgoing call to an outside API must go through the one counted place for that provider (or add one), so the numbers stay complete.
+
+### 12. Performance: what runs in the request, what runs behind it
+Owner rule, 2026-11-28. Measured from the laptop: one Redis or Neon round trip is about 80 ms (58 to 112), so the number of trips a call makes **one after another** sets its time. On the Oracle server the trips are much shorter: judge a cache there, not here.
+- **Count the trips.** Every new or changed endpoint states how many round trips it makes in a row (caller lookup 1, plus the data) and keeps them as few as it can. Never read the same data twice in one request.
+- **Decide where the work runs:**
+
+| Work | Where |
+|---|---|
+| The answer the caller waits for, security and session checks, money writes and their audit | In the request, synchronous |
+| Independent reads of one request | In parallel, not one after another |
+| Storing a cache copy after a miss, counting usage, non-critical side effects | In-process background (the nexus executor). It never delays or fails the call; a failure is swallowed and logged at WARN |
+| Refreshing a stale heavy read, events another instance or a later step needs, work that must survive a restart | Kafka (rule 10), with its direct-call fallback when Kafka is off (rule 10a) |
+
+- **Never in the background:** anything the response, a permission check or a change the user must see at once depends on. A background write must be harmless if it lands late (versioned key or short time to live) and if it never runs.
+- **Heavy reads** (over about 300 ms warm) go through the nexus (rule 10) with a time to live and an eviction on every write that changes them. The first call may be slow; the repeat must not be.
+- **Cache scope:** private data is cached per user; one shared copy only for data that is the same for everyone (account types, menus per role). Do not add a version read to shared data.
+- **Prove a cache before keeping it.** Report first-call and repeat-call times on the same machine. A cache that does not beat the database trip is not added (`users/me`, 2026-11-28: Redis 81 ms against a 80 ms query, so it was removed).
+- **Screens:** load one data set once per page and share it with every component (do not call `accounts/list` from each one); load independent data in parallel; show the data already held first and refresh quietly; page long lists.
+- **Measure** with the BSS log line `API END ... Time=` and the API usage screen. Over 300 ms warm is slow and needs a reason in the change.
+
 ## wealth-common rules
 - Shared library used by both the BFF and the BSS: config, errors, logger, interceptor, DTOs. A change here affects both services.
 - Publish `wealth-common` before building the BSS or BFF in CI. Run both services' tests after a change.
